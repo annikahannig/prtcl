@@ -2,7 +2,7 @@
 import math
 
 class Particle:
-    def __init__(self, pos, v=(0,0), r=0.1, fixed=False, collides=True):
+    def __init__(self, pos, v=(0,0), r=1.0, fixed=False, collides=True):
         self.r = r
 
         self.x = pos[0]
@@ -17,37 +17,42 @@ class Particle:
         self.collides = collides
 
 
-    def _distance(self, p):
-        return math.sqrt((self.x - p.x)**2 +
-                         (self.y - p.y)**2)
+    def _distance(self, x, y):
+        return math.sqrt((self.x - x)**2 +
+                         (self.y - y)**2)
 
 
-    def _collide(self):
+    def _collide(self, x, y):
         if not self.collides:
-            return False
+            return None
 
         # Collide with others
         others = self.space.particles - {self}
         for p in others:
-            if p._distance(self) < self.r:
-                return True
+            if p._distance(x, y) < self.r:
+                return p
 
-        return False
+        return None
 
 
     def update(self, dt):
-
-        # Collide
-        if self._collide():
-            return
 
         if self.fixed:
             return
 
         # Apply gravity
-        self.vy += dt * self.space.g
+        vy = self.vy + dt * self.space.g
 
-        self.x = self.x + dt * self.vx
-        self.y = self.y + dt * self.vy
+        # Advance
+        x = self.x + dt * self.vx
+        y = self.y + dt * self.vy
 
+        # Collide
+        if self._collide(x, y):
+            self.vx = 0
+            self.vy = 0
+            return
 
+        self.vy = vy
+        self.x = x
+        self.y = y
