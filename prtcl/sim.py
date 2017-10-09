@@ -20,11 +20,11 @@ def simulate_debug(space):
         if i % (1 * FPS) == 0:
             space.add_particle(particle.Particle((0, 16)))
 
-        if i % 16 == 0:
-            FLOOR.collides = False
+        # if i % 16 == 0:
+        #   FLOOR.collides = False
 
-        if i % 18 == 0:
-            FLOOR.collides = True
+        # if i % 25 == 0:
+        #    FLOOR.collides = True
 
 
         space.update()
