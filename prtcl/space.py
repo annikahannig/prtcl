@@ -19,6 +19,14 @@ class Space:
         return self
 
 
+    def remove_particle(self, p):
+        """Unregister particle"""
+        self.particles = self.particles - {p}
+        p.space = None
+
+        return self
+
+
     def update(self):
         if self.t == None:
             self.t = time.time()

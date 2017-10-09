@@ -17,6 +17,7 @@ class Particle:
         self.collides = collides
 
 
+
     def _distance(self, x, y):
         return math.sqrt((self.x - x)**2 +
                          (self.y - y)**2)
@@ -29,10 +30,16 @@ class Particle:
         # Collide with others
         others = self.space.particles - {self}
         for p in others:
+            if not p.collides:
+                continue
             if p._distance(x, y) < self.r:
                 return p
 
         return None
+
+
+    def on_death(self):
+        self.space.remove_particle(self)
 
 
     def update(self, dt):
@@ -56,3 +63,7 @@ class Particle:
         self.vy = vy
         self.x = x
         self.y = y
+
+        # Are we still alive?
+        if self.y < -1:
+            self.on_death()

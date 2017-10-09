@@ -17,7 +17,7 @@ def simulate_debug(space):
         t = time.time() - t0
 
         if t > 5:
-            FLOOR.fixed = False
+            FLOOR.collides = False
 
         space.update()
         space.print_state()
